@@ -3,6 +3,7 @@ const User = require("../models/user");
 const handlepostuser = async (req, res) => {
   try {
     const body = req.body;
+    console.log("body", body);
     if (!body) return res.status(400).send({ message: "invalid body" });
     const user = await User.create({
       fullname: body.fullname,

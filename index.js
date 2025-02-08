@@ -4,9 +4,14 @@ const { connecttoMongoDB } = require("./connection/connection");
 const app = express();
 const userRouter = require("./routes/user");
 const youtubeRouter = require("./routes/youtube");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const PORT = 8000;
 connecttoMongoDB(process.env.MONGO_URL);
+
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static("public"));
 app.set("view engine", "ejs");
