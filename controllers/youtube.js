@@ -26,7 +26,9 @@ const handlePostData = async (req, res) => {
     // Check if data with the same ID already exists
     const existingVideo = await Youtube.findOne({ id });
     if (existingVideo) {
-      return res.status(400).json({ message: "Video with this ID already exists" });
+      return res
+        .status(400)
+        .json({ message: "Video with this ID already exists" });
     }
 
     // Save the new video to the database
@@ -45,4 +47,8 @@ const handlePostData = async (req, res) => {
   }
 };
 
-module.exports = { handleGetData, handlePostData };
+const handlegetyoutube = (req, res) => {
+  return res.render("youtube");
+};
+
+module.exports = { handleGetData, handlePostData, handlegetyoutube };
