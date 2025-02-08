@@ -7,11 +7,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       const API_KEY = "AIzaSyDci9Qdp72wgpCnqaw8NfJGP9qPr-lxMlo";
-      const searchQuery = "finance and stocks";
+      const searchQuery = "finance";
       const API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${searchQuery}&type=video&maxResults=6&key=${API_KEY}`;
 
-      // Fetch videos and render them
-      async function fetchAndRenderVideos() {
         try {
           const response = await fetch(API_URL);
           const data = await response.json();
@@ -40,7 +38,7 @@
                 allowfullscreen
               ></iframe>
               <div class="mt-2 flex justify-between items-center">
-                <p class="text-lg font-medium text-gray-700">${videoTitle}</p>
+                <p class="text-lg font-medium text-gray-700 truncate w-3/4">${videoTitle}</p>
                 <button class="text-[12px] text-white bg-orange-500 px-2 py-1 rounded-md hover:bg-orange-600 transition duration-300">
                   Extract Summary
                 </button>
@@ -50,16 +48,58 @@
         });
       }
 
-      document.addEventListener("DOMContentLoaded", fetchAndRenderVideos);
+      function handleSearch(event) {
+        event.preventDefault();
+        const searchInput = document.getElementById("searchInput").value.trim();
+        if (searchInput) {
+          fetchAndRenderVideos(searchInput);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchAndRenderVideos();
+        document
+          .getElementById("searchForm")
+          .addEventListener("submit", handleSearch);
+      });
     </script>
   </head>
-  <body class="bg-gradient-to-br from-black via-gray-900 to-slate-900 p-6 min-h-screen">
+  <body
+    class="bg-gradient-to-br from-black via-gray-900 to-slate-900 p-6 min-h-screen"
+  >
     <div class="max-w-6xl mx-auto">
       <h1 class="text-3xl font-semibold text-white mb-6 text-center">
         Related YouTube Videos
       </h1>
 
-      <div id="videoGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+      <!-- Search Bar -->
+      <form id="searchForm" class="flex justify-center mb-8">
+        <div class="relative w-full max-w-lg">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for videos..."
+            class="w-full p-3 pl-10 text-white bg-gray-800 border border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+          />
+          <svg
+            class="absolute left-3 top-3 h-5 w-5 text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm-6 4a6 6 0 1 1 11.32 3.163l3.850 3.849a1 1 0 0 1-1.415 1.415l-3.849-3.85A6 6 0 0 1 2 8z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+      </form>
+
+      <!-- Video Gallery -->
+      <div
+        id="videoGallery"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+      ></div>
     </div>
   </body>
 </html>
