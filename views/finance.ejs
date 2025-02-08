@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Live Trades</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      let socket;
+      const priceData = {};
+      const priceChart = {};
+
+      document.addEventListener("DOMContentLoaded", () => {
+        initializeWebSocket();
+      });
+
+      function initializeWebSocket() {
+        const endpoint = "wss://stream.binance.com:9443/stream?streams=btcusdt@trade/ethusdt@trade/xrpusdt@trade/ltcusdt@trade/dogeusdt@trade";
+        socket = new WebSocket(endpoint);
+
+        socket.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          const tradeData = message.data;
+          updatePrice(tradeData.s, parseFloat(tradeData.p));
+        };
+      }
+
+      function updatePrice(symbol, price) {
+        const chartId = `${symbol.toLowerCase()}Chart`;
+        const chartElement = document.getElementById(chartId);
+        
+        if (!chartElement) return;
+
+        if (!priceData[symbol]) {
+          priceData[symbol] = [];
+        }
+
+        priceData[symbol].push(price);
+        if (priceData[symbol].length > 20) {
+          priceData[symbol].shift();
+        }
+
+        if (priceChart[symbol]) {
+          priceChart[symbol].data.labels = priceData[symbol].map((_, i) => i + 1);
+          priceChart[symbol].data.datasets[0].data = priceData[symbol];
+          priceChart[symbol].update();
+        } else {
+          createChart(chartId, symbol, priceData[symbol]);
+        }
+      }
+
+      function createChart(chartId, symbol, data) {
+        const ctx = document.getElementById(chartId).getContext("2d");
+        priceChart[symbol] = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: data.map((_, i) => i + 1),
+            datasets: [
+              {
+                label: `${symbol} Price (USD)`,
+                backgroundColor: "rgba(255, 99, 132, 0.2)",
+                borderColor: "rgba(255, 99, 132, 1)",
+                borderWidth: 1,
+                data: data,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        });
+      }
+    </script>
+  </head>
+  <body class="bg-gradient-to-br from-black via-gray-900 to-slate-900 p-6 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl font-semibold text-white mb-6 text-center">
+        Live Crypto Trade Prices
+      </h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <h2 class="text-xl font-medium text-gray-700 text-center">BTC/USDT</h2>
+          <canvas id="btcusdtChart" class="w-full h-48"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <h2 class="text-xl font-medium text-gray-700 text-center">ETH/USDT</h2>
+          <canvas id="ethusdtChart" class="w-full h-48"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <h2 class="text-xl font-medium text-gray-700 text-center">XRP/USDT</h2>
+          <canvas id="xrpusdtChart" class="w-full h-48"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <h2 class="text-xl font-medium text-gray-700 text-center">LTC/USDT</h2>
+          <canvas id="ltcusdtChart" class="w-full h-48"></canvas>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg">
+          <h2 class="text-xl font-medium text-gray-700 text-center">DOGE/USDT</h2>
+          <canvas id="dogeusdtChart" class="w-full h-48"></canvas>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
