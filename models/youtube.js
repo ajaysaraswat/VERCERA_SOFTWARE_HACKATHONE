@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
 const ytSchema = new mongoose.Schema({
-  name:String,
+  id:String,
   description:String,
+  url:String,
+  summary:String
+
 })
 
-const Youtube = mongoose.model("Chat",ytSchema);
+const Youtube = mongoose.model("Youtube",ytSchema);
 
-module.exports =  Chat;
+module.exports =  Youtube;
