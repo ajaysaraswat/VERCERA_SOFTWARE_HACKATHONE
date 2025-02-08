@@ -6,6 +6,7 @@ const userRouter = require("./routes/user");
 const youtubeRouter = require("./routes/youtube");
 const cookieParser = require("cookie-parser");
 const path = require("path");
+const financeRouter = require("./routes/finance");
 const PORT = 8000;
 connecttoMongoDB(process.env.MONGO_URL);
 
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 app.use("/", youtubeRouter);
 app.use("/", userRouter);
+app.use("/",financeRouter)
 
 app.listen(PORT, (req, res) => {
   console.log(`server is running on port ${PORT}`);

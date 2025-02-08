@@ -29,7 +29,7 @@
       function updatePrice(symbol, price) {
         const chartId = `${symbol.toLowerCase()}Chart`;
         const chartElement = document.getElementById(chartId);
-        
+
         if (!chartElement) return;
 
         if (!priceData[symbol]) {
@@ -37,7 +37,8 @@
         }
 
         priceData[symbol].push(price);
-        if (priceData[symbol].length > 20) {
+        // Remove older data beyond the last 10 points
+        if (priceData[symbol].length > 10) {
           priceData[symbol].shift();
         }
 
@@ -79,24 +80,24 @@
       <h1 class="text-3xl font-semibold text-white mb-6 text-center">
         Live Crypto Trade Prices
       </h1>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-white p-4 rounded-lg shadow-lg">
+      <div class="flex flex-wrap gap-6 justify-center">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-80 max-w-xs">
           <h2 class="text-xl font-medium text-gray-700 text-center">BTC/USDT</h2>
           <canvas id="btcusdtChart" class="w-full h-48"></canvas>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow-lg">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-80 max-w-xs">
           <h2 class="text-xl font-medium text-gray-700 text-center">ETH/USDT</h2>
           <canvas id="ethusdtChart" class="w-full h-48"></canvas>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow-lg">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-80 max-w-xs">
           <h2 class="text-xl font-medium text-gray-700 text-center">XRP/USDT</h2>
           <canvas id="xrpusdtChart" class="w-full h-48"></canvas>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow-lg">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-80 max-w-xs">
           <h2 class="text-xl font-medium text-gray-700 text-center">LTC/USDT</h2>
           <canvas id="ltcusdtChart" class="w-full h-48"></canvas>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow-lg">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-80 max-w-xs">
           <h2 class="text-xl font-medium text-gray-700 text-center">DOGE/USDT</h2>
           <canvas id="dogeusdtChart" class="w-full h-48"></canvas>
         </div>
