@@ -11,7 +11,7 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
 app.get("/", (req, res) => {
-  return res.json({ message: "working" });
+  return res.render("home");
 });
 app.use("/", youtubeRouter);
 app.listen(PORT, (req, res) => {
