@@ -50,5 +50,8 @@ const handlePostData = async (req, res) => {
 const handlegetyoutube = (req, res) => {
   return res.render("youtube");
 };
+const handlegetsummary = (req,res)=>{
+  return res.render("summary")
+}
 
-module.exports = { handleGetData, handlePostData, handlegetyoutube };
+module.exports = { handleGetData, handlePostData, handlegetyoutube, handlegetsummary};
