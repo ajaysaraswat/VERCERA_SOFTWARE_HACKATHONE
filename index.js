@@ -4,7 +4,6 @@ const { connecttoMongoDB } = require("./connection/connection");
 const app = express();
 
 const PORT = 8000;
-console.log("url", process.env.MONGO_URL);
 connecttoMongoDB(process.env.MONGO_URL);
 
 app.get("/", (req, res) => {
