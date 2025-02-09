@@ -3,25 +3,103 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vercera S/W Hackathon</title>
+    <title>Cryptocurrency Prices</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-[#0D1217] min-h-screen flex flex-col text-white">
     <!-- Header -->
-    <header class="w-full fixed top-0 bg-blue-400 text-white shadow-md z-50">
-      <div class="container mx-auto px-4"><%- include('./partials/nav') %></div>
+    <header class="w-full fixed top-0 bg-blue-600 text-white shadow-md z-50">
+      <div class="container mx-auto"><%- include('./partials/nav') %></div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-grow pt-16">
-      <div class="container mx-auto px-4">
-        <!-- Your main content goes here -->
+    <main class="mt-20 w-full max-w-4xl mx-auto">
+      <div class="bg-[#0D1217] shadow-md rounded-lg overflow-hidden">
+        <table class="table-auto w-full">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="px-4 py-2 text-left">#</th>
+              <th class="px-4 py-2 text-left">Image</th>
+              <th class="px-4 py-2 text-left">Name</th>
+              <th class="px-4 py-2 text-left">Symbol</th>
+              <th class="px-4 py-2 text-right">Current Price (USD)</th>
+              <th class="px-4 py-2 text-left">Timestamp</th>
+              <th class="px-4 py-2 text-left">Add Alert</th>
+            </tr>
+          </thead>
+          <tbody id="crypto-table" class="divide-y divide-gray-600">
+            <!-- Dynamic rows will be inserted here -->
+          </tbody>
+        </table>
       </div>
     </main>
 
     <!-- Footer -->
     <footer class="mt-8 py-4 bg-gray-800 text-white text-center w-full">
-      <p>© 2025 code Monitor. All Rights Reserved.</p>
+      <p>© 2025 Crypto Monitor. All Rights Reserved.</p>
     </footer>
+
+    <!-- WebSocket Script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io("http://localhost:8000");
+
+      // Map to keep track of rows by currency symbol
+      const coinMap = new Map();
+      const tableBody = document.getElementById("crypto-table");
+
+      socket.on("cryptoPrices", (data) => {
+        // Ensure data is an array (or an array-like object)
+        if (Array.isArray(data)) {
+          data.forEach((coin, index) => {
+            if (coinMap.has(coin.symbol)) {
+              // Update the existing row
+              const row = coinMap.get(coin.symbol);
+              row.querySelector(".price").textContent = `$${coin.price.toFixed(
+                2
+              )}`;
+              row.querySelector(".timestamp").textContent =
+                new Date().toLocaleString();
+            } else {
+              // Create a new row for the new currency
+              const row = document.createElement("tr");
+              row.className = "hover:bg-gray-700";
+              row.innerHTML = `
+						<td class="px-4 py-2">${index + 1}</td>
+						<td class="px-4 py-2">
+							<img src="${coin.image}" alt="${coin.name}" class="w-8 h-8 rounded-full">
+						</td>
+						<td class="px-4 py-2">${coin.name}</td>
+						<td class="px-4 py-2">${coin.symbol.toUpperCase()}</td>
+						<td class="px-4 py-2 text-right text-white price">
+							$${coin.price.toFixed(2)}
+						</td>
+						<td class="px-4 py-2 text-yellow-500 timestamp">
+							${new Date().toLocaleString()}
+						</td>
+						<td class="px-4 py-2 text-center">
+		<a href=/alert/${coin.symbol.toUpperCase()} class="bg-green-600 hover:bg-red-800 text-black px-3 py-1 rounded-md shadow-md">
+			Add Alert
+		</a>
+	</td>
+					`;
+              tableBody.appendChild(row);
+              coinMap.set(coin.symbol, row);
+            }
+          });
+        } else {
+          console.error("Received data is not an array");
+        }
+      });
+
+      // Error handling for WebSocket
+      socket.on("connect_error", () => {
+        console.error("WebSocket connection error");
+      });
+
+      socket.on("disconnect", () => {
+        console.warn("WebSocket disconnected");
+      });
+    </script>
   </body>
 </html>

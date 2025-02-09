@@ -67,7 +67,7 @@ function handleSocketConnection(io) {
         socket.emit("cryptoPrices", formattedData);
       }
       //	console.log("Checking alerts...");
-      await monitorAlerts(cachedData);
+      //await monitorAlerts(cachedData);
     }, 1000);
 
     binanceSocket.on("close", () => {

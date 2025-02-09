@@ -19,6 +19,8 @@ connecttoMongoDB(process.env.MONGO_URL);
 const server = http.createServer(app);
 const io = new Server(server);
 
+handleSocketConnection(io);
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -27,12 +29,14 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
+//initialize the socket connection
+
 app.get("/", (req, res) => {
   return res.render("home");
 });
 app.post("/youtube/data", (req, res) => {
   const body = req.body;
-  if (!body) return res.json({ message: "Give URL" });
+  if (!body.youtubeUrl) return res.json({ message: "Give URL" });
 
   return res.json({
     summary:
@@ -51,9 +55,6 @@ app.use("/", youtubeRouter);
 app.use("/", userRouter);
 app.use("/", financeRouter);
 
-//initialize the socket connection
-handleSocketConnection(io);
-
-app.listen(PORT, (req, res) => {
+server.listen(PORT, (req, res) => {
   console.log(`server is running on port ${PORT}`);
 });
