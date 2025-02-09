@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
-const {checkauth} = require("./middlewares/auth")
+const { checkauth } = require("./middlewares/auth");
 const financeRouter = require("./routes/finance");
 const handleSocketConnection = require("./socketHandler");
 const { restrictedtousersigninonly } = require("./middlewares/auth");
@@ -55,9 +55,9 @@ app.post("/youtube/data", (req, res) => {
 });
 
 app.use("/", youtubeRouter);
-app.use("/",checkauth,userRouter);
+app.use("/", checkauth, userRouter);
 app.use("/", financeRouter);
-app.use("/", restrictedtousersigninonly, alertRouter);
+app.use("/", checkauth, alertRouter);
 
 server.listen(PORT, (req, res) => {
   console.log(`server is running on port ${PORT}`);

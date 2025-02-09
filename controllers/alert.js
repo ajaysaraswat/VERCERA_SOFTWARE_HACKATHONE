@@ -5,28 +5,31 @@ const sendEmail = require("../services/sendEmail");
 
 const handlepostAlert = async (req, res) => {
   try {
-    console.log("req.user", req.User._id);
+    //console.log("req.user", req.User._id);
     const { symbol, condition, targetPrice } = req.body;
-    const userId = req.User._id;
+    const userId = req.user._id;
     // const user = req.User
     if (!userId || !symbol || !condition || !targetPrice) {
       return res.status(400).json({ error: "all target fields are required" });
     }
     const userExists = await User.findById(userId);
+    console.log("userExists", userExists);
+
     if (!userExists) return res.status(404).json({ error: "User not found" });
-    const newAlert = Alert.create({
+    const newAlert = await Alert.create({
       userId: userId,
       symbol: symbol,
       condition: condition,
       targetPrice: targetPrice,
     });
-    // (await newAlert).save(); //new change hai ye
+    console.log("newAlert", newAlert);
+
+    (await newAlert).save(); // ye abhi kiya hai
     return res.status(201).json({
       message: "Alert created sucessfully",
       alerts: newAlert,
     });
   } catch (err) {
-    console.log("req.user", req.user);
     console.log("Error creating alert", err.message);
     res.status(500).json({ error: "internal server error" });
   }
@@ -52,14 +55,20 @@ const monitorAlerts = async (latestPrices) => {
           await alert.save();
 
           const user = await User.findById(userId);
-          // console.log("user ofr email", user);
+          console.log("user ofr email", user);
           if (user) {
             user.alerts.push(alert._id);
             user.save();
 
             //send email
             console.log("function called before");
-            sendEmail(user.email, symbol, currentPrice, condition, targetPrice);
+            await sendEmail(
+              user.email,
+              symbol,
+              currentPrice,
+              condition,
+              targetPrice
+            );
             console.log("function called after");
           }
         }
@@ -71,7 +80,10 @@ const monitorAlerts = async (latestPrices) => {
 };
 const handlegetalert = (req, res) => {
   const symbol = req.params.symbol;
-  console.log("req.user", req.User);
+  console.log("req.user", req.user);
+  if (!req.user) {
+    return res.render("register");
+  }
   res.render("alert", {
     symbol: symbol,
     userId: req.User,
