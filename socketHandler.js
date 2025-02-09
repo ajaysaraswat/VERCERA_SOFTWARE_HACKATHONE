@@ -2,7 +2,7 @@ const WebSocket = require("ws");
 require("dotenv").config();
 const { cryptoNames, cryptoImages } = require("./assests/coin");
 const CryptoPrice = require("./models/CryptoPrice");
-const { monitorAlerts } = require("./controllers/alert");
+// const { monitorAlerts } = require("./controllers/alert");
 
 function handleSocketConnection(io) {
   io.on("connection", (socket) => {

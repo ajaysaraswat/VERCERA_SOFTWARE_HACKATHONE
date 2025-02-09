@@ -1,5 +1,5 @@
 const CryptoPrice = require("../models/CryptoPrice");
-const client = require("../Redis/client");
+// const client = require("../Redis/client");
 
 const handlegetCoinData = (req, res) => {
   return res.render("home", {
