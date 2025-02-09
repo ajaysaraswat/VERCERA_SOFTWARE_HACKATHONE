@@ -13,6 +13,7 @@ const { Server } = require("socket.io");
 const {checkauth} = require("./middlewares/auth")
 const financeRouter = require("./routes/finance");
 const handleSocketConnection = require("./socketHandler");
+const { restrictedtousersigninonly } = require("./middlewares/auth");
 
 const PORT = 8000;
 
@@ -56,7 +57,7 @@ app.post("/youtube/data", (req, res) => {
 app.use("/", youtubeRouter);
 app.use("/",checkauth,userRouter);
 app.use("/", financeRouter);
-app.use("/", alertRouter);
+app.use("/", restrictedtousersigninonly, alertRouter);
 
 server.listen(PORT, (req, res) => {
   console.log(`server is running on port ${PORT}`);
