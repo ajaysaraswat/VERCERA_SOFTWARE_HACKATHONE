@@ -2,7 +2,7 @@ const WebSocket = require("ws");
 require("dotenv").config();
 const { cryptoNames, cryptoImages } = require("./assests/coin");
 const CryptoPrice = require("./models/CryptoPrice");
-// const { monitorAlerts } = require("./controllers/alert");
+const { monitorAlerts } = require("./controllers/alert");
 
 function handleSocketConnection(io) {
   io.on("connection", (socket) => {
@@ -53,7 +53,7 @@ function handleSocketConnection(io) {
             new: true,
           }
         );
-        // await monitorAlerts(cachedData);
+        await monitorAlerts(cachedData);
       } catch (err) {
         console.log("Error while saving in the database", err);
       }

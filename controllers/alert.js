@@ -1,11 +1,11 @@
 const Alert = require("../models/alert");
 const User = require("../models/user");
-//const sendEmail = require("../services/sendEmail");
+const sendEmail = require("../services/sendEmail");
 //const { setCache, getCache } = require("../Redis/utils");
 
 const handlepostAlert = async (req, res) => {
   try {
-    //console.log("req.user", req.User._id);
+    console.log("req.user", req.User._id);
     const { symbol, condition, targetPrice } = req.body;
     const userId = req.User._id;
     // const user = req.User
@@ -26,6 +26,7 @@ const handlepostAlert = async (req, res) => {
       alerts: newAlert,
     });
   } catch (err) {
+    console.log("req.user", req.user);
     console.log("Error creating alert", err.message);
     res.status(500).json({ error: "internal server error" });
   }
