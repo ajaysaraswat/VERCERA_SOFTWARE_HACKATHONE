@@ -65,7 +65,7 @@
             const data = await response.json();
             console.log("Summary Response:", data);
             // Process the response as needed (e.g., navigate to summary page)
-            window.location.href = "http://localhost:8000/youtube/summary"
+            window.location.href = `http://localhost:8000/youtube/summary?videoId=${videoId}`
           } else {
             console.error("Failed to fetch summary", response);
           }

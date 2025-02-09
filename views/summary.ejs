@@ -7,24 +7,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gradient-to-br from-black via-gray-900 to-slate-900 p-6 min-h-screen">
+    <header class="w-full fixed top-0 bg-blue-600 text-white shadow-md z-50">
+      <div class="container mx-auto"><%- include('./partials/nav') %></div>
+    </header>
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-3xl font-semibold text-white text-center mb-6">
+      <h1 class="text-4xl font-extrabold text-white text-center mt-28">
         Summary Viewer
       </h1>
 
       <div class="grid grid-cols-4 gap-6">
         <!-- Sidebar Section -->
-        <aside class="col-span-1 bg-gray-800 p-4 rounded-lg shadow-lg">
-          <h2 class="text-xl font-medium text-white mb-4">Extracted Summaries</h2>
-          <ul id="summary-list" class="space-y-2"></ul>
+        <aside class="col-span-1 bg-gray-800 p-6 rounded-lg shadow-2xl">
+          <h2 class="text-2xl font-medium text-white mb-6">Extracted Summaries</h2>
+          <ul id="summary-list" class="space-y-4"></ul>
         </aside>
 
         <!-- Main Summary Section -->
-        <main class="col-span-3 bg-white p-6 rounded-lg shadow-lg">
-          <h2 id="summary-title" class="text-2xl font-semibold text-gray-800 mb-4">
+        <main class="col-span-3 bg-white p-8 rounded-lg shadow-2xl">
+          <h2 id="summary-title" class="text-3xl font-semibold text-gray-800 mb-6">
             Summary
           </h2>
-          <p id="summary-content" class="text-gray-700 leading-relaxed">
+          <p id="summary-content" class="text-gray-700 leading-relaxed text-lg">
             Select a summary to view the details here.
           </p>
         </main>
@@ -35,6 +38,9 @@
       // Fetch data and render summaries in the sidebar
       document.addEventListener("DOMContentLoaded", async () => {
         const getUrl = "http://localhost:8000/user/getallsummary";
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('videoId'); // Get the videoId from URL
+        console.log("Video ID from URL:", videoId); // Debugging: log the videoId
 
         try {
           const response = await fetch(getUrl, {
@@ -48,21 +54,28 @@
 
           const data = await response.json();
           const youtubeVideos = data.youtubeVideos || [];
+          console.log("Fetched videos:", youtubeVideos); // Debugging: log the fetched videos
+
           const summaryList = document.getElementById("summary-list");
 
           // Populate summaries in the sidebar
           youtubeVideos.forEach(video => {
             const listItem = document.createElement("li");
-            listItem.className =
-              "text-sm text-gray-300 hover:text-white cursor-pointer";
+            listItem.className = "text-sm text-gray-300 hover:text-white cursor-pointer transition-all duration-200 ease-in-out transform hover:scale-105";
 
             const button = document.createElement("button");
             button.innerText = video.title;
-            button.className = "w-full text-left";
+            button.className = "w-full text-left font-semibold text-gray-100 hover:text-white focus:outline-none transition-all duration-300";
             button.onclick = () => viewSummary(video);
 
             listItem.appendChild(button);
             summaryList.appendChild(listItem);
+
+            // Debugging: check if video.id matches videoId
+            if (video.id === videoId) {
+              console.log("Matched video:", video); // Debugging: log the matched video
+              viewSummary(video);
+            }
           });
         } catch (error) {
           console.error("Error loading summaries:", error);
