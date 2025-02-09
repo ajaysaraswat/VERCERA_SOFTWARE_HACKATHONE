@@ -24,6 +24,12 @@ const userSchema = new mongoose.Schema(
     salt: {
       type: String,
     },
+    youtubeList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Youtube", // Refers to the Youtube model
+      },
+    ],
   },
   {
     timestamps: true,
