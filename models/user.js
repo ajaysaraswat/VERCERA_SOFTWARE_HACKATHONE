@@ -15,12 +15,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // alerts: [
-    // 	{
-    // 		type: mongoose.Schema.Types.ObjectId,
-    // 		ref: "Alert",
-    // 	},
-    // ],
+    alerts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Alert",
+      },
+    ],
     salt: {
       type: String,
     },

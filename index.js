@@ -5,6 +5,7 @@ const app = express();
 const userRouter = require("./routes/user");
 const youtubeRouter = require("./routes/youtube");
 const coinRouter = require("./routes/coin");
+const alertRouter = require("./routes/alert");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const http = require("http");
@@ -54,6 +55,7 @@ app.post("/youtube/data", (req, res) => {
 app.use("/", youtubeRouter);
 app.use("/", userRouter);
 app.use("/", financeRouter);
+app.use("/", alertRouter);
 
 server.listen(PORT, (req, res) => {
   console.log(`server is running on port ${PORT}`);
