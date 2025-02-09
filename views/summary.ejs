@@ -34,16 +34,29 @@
         <!-- Main Summary Section -->
         <main class="col-span-3 bg-white p-6 rounded-lg shadow-lg">
           <h2 id="summary-title" class="text-2xl font-semibold text-gray-800 mb-4">
-            Click a Summary to View Details
+            Summary
           </h2>
           <p id="summary-content" class="text-gray-700 leading-relaxed">
-            Select a summary from the left sidebar to view its content here.
+            <!-- This will be replaced by the actual summary content -->
           </p>
         </main>
       </div>
     </div>
 
     <script>
+      // Function to extract the transcript from URL and display it
+      document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('videoId');
+        const transcript = decodeURIComponent(urlParams.get('transcript'));
+        console.log("transcript",transcript)
+        if (transcript) {
+          document.getElementById("summary-content").innerText = transcript;
+        } else {
+          document.getElementById("summary-content").innerText = "No summary available.";
+        }
+      });
+
       function viewSummary(summaryContent) {
         document.getElementById("summary-title").innerText = "Selected Summary";
         document.getElementById("summary-content").innerText = summaryContent;
