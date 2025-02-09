@@ -10,6 +10,7 @@ const cookieParser = require("cookie-parser");
 const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
+const {checkauth} = require("./middlewares/auth")
 const financeRouter = require("./routes/finance");
 const handleSocketConnection = require("./socketHandler");
 
@@ -53,7 +54,7 @@ app.post("/youtube/data", (req, res) => {
 });
 
 app.use("/", youtubeRouter);
-app.use("/", userRouter);
+app.use("/",checkauth,userRouter);
 app.use("/", financeRouter);
 app.use("/", alertRouter);
 

@@ -53,6 +53,7 @@ const handlepostsummary = async (req, res) => {
   }
 
   const userId = req.user._id;
+  console.log("handlepost",userId)
 
   try {
     // Create new YouTube video data
@@ -68,6 +69,7 @@ const handlepostsummary = async (req, res) => {
     // Save the YouTube video
     const youtubeVideo = new Youtube(youtubeData);
     await youtubeVideo.save();
+    console.log(youtubeVideo)
     if (!youtubeVideo) {
       return res.status(500).json({ message: "Failed to save YouTube video" });
     }
@@ -77,10 +79,10 @@ const handlepostsummary = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
+    console.log("user mil gya")
     user.youtubeList.push(youtubeVideo._id);
     await user.save();
-
+    console.log("user mai save hogya")
     return res.status(200).json({ message: "Summary added and user updated" });
 
   } catch (err) {

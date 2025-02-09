@@ -12,8 +12,11 @@ const restrictedtousersigninonly = (req, res, next) => {
 };
 
 const checkauth = (req, res, next) => {
+  console.log("checkauth called")
   const userId = req.cookies?.uid;
+  console.log(userId)
   const user = getuser(userId);
+  console.log(user);
   req.user = user;
   next();
 };

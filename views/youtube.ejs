@@ -53,11 +53,12 @@
 
         try {
           const response = await fetch(summaryUrl, {
-            method: "POST", // Correct method
+            method: "POST",
             headers: {
               "Content-Type": "application/json", // Ensuring content type is JSON
             },
             body: JSON.stringify({ videoId }), // Passing videoId in request body
+            credentials: "include", // This ensures cookies are sent along with the request
           });
 
           if (response.ok) {
@@ -88,7 +89,9 @@
       });
     </script>
   </head>
-  <body class="bg-gradient-to-br from-black via-gray-900 to-slate-900 p-6 min-h-screen">
+  <body
+    class="bg-gradient-to-br from-black via-gray-900 to-slate-900 p-6 min-h-screen"
+  >
     <div class="max-w-6xl mx-auto">
       <h1 class="text-3xl font-semibold text-white mb-6 text-center">
         Related YouTube Videos
@@ -118,7 +121,10 @@
       </form>
 
       <!-- Video Gallery -->
-      <div id="videoGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+      <div
+        id="videoGallery"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+      ></div>
     </div>
   </body>
 </html>

@@ -1,5 +1,4 @@
 const express = require("express");
-const {checkauth} = require("../middlewares/auth")
 const {
   handlepostuser,
   handlegetsignin,
@@ -16,6 +15,6 @@ userRouter.get("/user", handlegetuser);
 userRouter.get("/user/signin", handlegetsignin);
 userRouter.post("/user/logout", handlepostuser);
 //kuldeep
-userRouter.post("/user/summary",checkauth,handlepostsummary)
+userRouter.post("/user/summary",handlepostsummary)
 
 module.exports = userRouter;
