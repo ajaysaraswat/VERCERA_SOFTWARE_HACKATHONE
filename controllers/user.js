@@ -1,6 +1,6 @@
 const { response } = require("express");
 const User = require("../models/user");
-const Youtube = require("../models/youtube")
+const Youtube = require("../models/youtube");
 const axios = require("axios");
 const handlepostuser = async (req, res) => {
   try {
@@ -13,10 +13,10 @@ const handlepostuser = async (req, res) => {
       password: body.password,
     });
 
-    return res
-      .status(201)
-      .json({ status: "Created Successfully", message: user._id });
-    // return res.redirect("/user/signin");
+    //   return res
+    // .status(201)
+    // .json({ status: "Created Successfully", message: user._id });
+    return res.redirect("/user/signin");
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
@@ -29,8 +29,8 @@ const handlepostsignin = async (req, res) => {
     const uid = await User.matchPasswordandGenerateToken(email, password);
 
     res.cookie("uid", uid);
-    // res.render("home");
-    return res.json({ message: "login succesfully", "jwt token ": uid });
+    res.render("home");
+    //return res.json({ message: "login succesfully", "jwt token ": uid });
   } catch (err) {
     //return res.redirect("/");
     return res.json({ message: err.message });
@@ -59,7 +59,7 @@ const handlepostsummary = async (req, res) => {
 
   try {
     const response = await axios.post("http://localhost:5678/webhook/ytube", {
-      youtubeUrl: `https://www.youtube.com/watch?v=${videoId}`
+      youtubeUrl: `https://www.youtube.com/watch?v=${videoId}`,
     });
 
     const youtubeData = response.data;
@@ -117,5 +117,5 @@ module.exports = {
   handlegetuser,
   handlegetsignin,
   handlepostsummary,
-  handlegetsummary
+  handlegetsummary,
 };

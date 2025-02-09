@@ -25,10 +25,11 @@ const handlepostAlert = async (req, res) => {
     console.log("newAlert", newAlert);
 
     (await newAlert).save(); // ye abhi kiya hai
-    return res.status(201).json({
-      message: "Alert created sucessfully",
-      alerts: newAlert,
-    });
+    // return res.status(201).json({
+    //   message: "Alert created sucessfully",
+    //   alerts: newAlert,
+    // });
+    return res.redirect("/");
   } catch (err) {
     console.log("Error creating alert", err.message);
     res.status(500).json({ error: "internal server error" });
