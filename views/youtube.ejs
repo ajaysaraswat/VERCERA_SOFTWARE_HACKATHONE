@@ -49,18 +49,23 @@
       }
 
       async function redirectToSummary(videoId) {
-        const summaryUrl = `http://localhost:5000/getTranscript?videoId=${videoId}`;
+        const summaryUrl = `http://localhost:8000/user/summary`;
+
         try {
-          const response = await fetch(summaryUrl);
-          const data = await response.json();
-          console.log("data",data.transcript)
-          if (data.transcript) {
-            // Redirect to the summary page, passing the transcript as part of the URL
-            const encodedTranscript = encodeURIComponent(data.transcript);
-            console.log(encodedTranscript)
-            window.location.href = `http://localhost:8000/youtube/summary?videoId=${videoId}&transcript=${data.transcript}`;
+          const response = await fetch(summaryUrl, {
+            method: "POST", // Correct method
+            headers: {
+              "Content-Type": "application/json", // Ensuring content type is JSON
+            },
+            body: JSON.stringify({ videoId }), // Passing videoId in request body
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Summary Response:", data);
+            // Process the response as needed (e.g., navigate to summary page)
           } else {
-            console.error("No transcript found");
+            console.error("Failed to fetch summary", response);
           }
         } catch (error) {
           console.error("Error fetching summary:", error);
