@@ -1,7 +1,7 @@
 const Alert = require("../models/alert");
 const User = require("../models/user");
-const sendEmail = require("../services/sendEmail");
-const { setCache, getCache } = require("../Redis/utils");
+//const sendEmail = require("../services/sendEmail");
+//const { setCache, getCache } = require("../Redis/utils");
 
 const handlepostAlert = async (req, res) => {
   try {
