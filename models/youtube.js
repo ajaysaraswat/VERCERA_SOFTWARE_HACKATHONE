@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const ytSchema = new mongoose.Schema({
   id:String,
   description:String,
-  url:String,
+  youtubeUrl:String,
   summary:String,
-  thumbnail:String,
+  topics:[String],
+  title:String
 })
 
 const Youtube = mongoose.model("Youtube",ytSchema);

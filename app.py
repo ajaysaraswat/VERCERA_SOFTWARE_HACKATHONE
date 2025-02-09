@@ -3,7 +3,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Allow CORS to access this API from your frontend
+CORS(app)  
 
 @app.route("/getTranscript", methods=["GET"])
 def get_transcript():
