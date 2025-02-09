@@ -20,7 +20,7 @@ const handlepostAlert = async (req, res) => {
       condition: condition,
       targetPrice: targetPrice,
     });
-    // (await newAlert).save();
+    // (await newAlert).save(); //new change hai ye
     return res.status(201).json({
       message: "Alert created sucessfully",
       alerts: newAlert,
