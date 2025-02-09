@@ -4,7 +4,8 @@ const {
   handlegetsignin,
   handlepostsignin,
   handlegetuser,
-  handlepostsummary
+  handlepostsummary,
+  handlegetsummary
 } = require("../controllers/user");
 
 const userRouter = express.Router();
@@ -16,5 +17,6 @@ userRouter.get("/user/signin", handlegetsignin);
 userRouter.post("/user/logout", handlepostuser);
 //kuldeep
 userRouter.post("/user/summary",handlepostsummary)
+userRouter.get("/user/getallsummary",handlegetsummary)
 
 module.exports = userRouter;

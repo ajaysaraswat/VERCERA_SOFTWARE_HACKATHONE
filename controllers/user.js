@@ -54,6 +54,8 @@ const handlepostsummary = async (req, res) => {
 
   const userId = req.user._id;
   console.log("handlepost",userId)
+  const videoId = req.body.videoId;
+  console.log(videoId)
 
   try {
     // Create new YouTube video data
@@ -90,6 +92,30 @@ const handlepostsummary = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+const handlegetsummary = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "User not authenticated" });
+  }
+
+  try {
+    const userId = req.user._id;
+
+    // Find the user and populate the YouTube list with detailed video data
+    const user = await User.findById(userId).populate("youtubeList");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return YouTube videos associated with the user
+    return res.status(200).json({
+      message: "YouTube videos retrieved successfully",
+      youtubeVideos: user.youtubeList,
+    });
+  } catch (err) {
+    console.error("Error in handlegetsummary:", err);
+    return res.status(500).json({ message: err.message });
+  }
+};
 
 module.exports = {
   handlepostuser,
@@ -97,5 +123,6 @@ module.exports = {
   handlelogout,
   handlegetuser,
   handlegetsignin,
-  handlepostsummary
+  handlepostsummary,
+  handlegetsummary
 };

@@ -16,19 +16,7 @@
         <!-- Sidebar Section -->
         <aside class="col-span-1 bg-gray-800 p-4 rounded-lg shadow-lg">
           <h2 class="text-xl font-medium text-white mb-4">Extracted Summaries</h2>
-          <ul id="summary-list" class="space-y-2">
-            <!-- Placeholder for dynamically loaded summaries -->
-            <li class="text-sm text-gray-300 hover:text-white cursor-pointer">
-              <button onclick="viewSummary('Summary Example 1')">
-                Summary Example 1
-              </button>
-            </li>
-            <li class="text-sm text-gray-300 hover:text-white cursor-pointer">
-              <button onclick="viewSummary('Summary Example 2')">
-                Summary Example 2
-              </button>
-            </li>
-          </ul>
+          <ul id="summary-list" class="space-y-2"></ul>
         </aside>
 
         <!-- Main Summary Section -->
@@ -37,29 +25,54 @@
             Summary
           </h2>
           <p id="summary-content" class="text-gray-700 leading-relaxed">
-            <!-- This will be replaced by the actual summary content -->
+            Select a summary to view the details here.
           </p>
         </main>
       </div>
     </div>
 
     <script>
-      // Function to extract the transcript from URL and display it
-      document.addEventListener("DOMContentLoaded", () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const videoId = urlParams.get('videoId');
-        const transcript = decodeURIComponent(urlParams.get('transcript'));
-        console.log("transcript",transcript)
-        if (transcript) {
-          document.getElementById("summary-content").innerText = transcript;
-        } else {
-          document.getElementById("summary-content").innerText = "No summary available.";
+      // Fetch data and render summaries in the sidebar
+      document.addEventListener("DOMContentLoaded", async () => {
+        const getUrl = "http://localhost:8000/user/getallsummary";
+
+        try {
+          const response = await fetch(getUrl, {
+            method: "GET",
+            credentials: "include"
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch summaries");
+          }
+
+          const data = await response.json();
+          const youtubeVideos = data.youtubeVideos || [];
+          const summaryList = document.getElementById("summary-list");
+
+          // Populate summaries in the sidebar
+          youtubeVideos.forEach(video => {
+            const listItem = document.createElement("li");
+            listItem.className =
+              "text-sm text-gray-300 hover:text-white cursor-pointer";
+
+            const button = document.createElement("button");
+            button.innerText = video.title;
+            button.className = "w-full text-left";
+            button.onclick = () => viewSummary(video);
+
+            listItem.appendChild(button);
+            summaryList.appendChild(listItem);
+          });
+        } catch (error) {
+          console.error("Error loading summaries:", error);
         }
       });
 
-      function viewSummary(summaryContent) {
-        document.getElementById("summary-title").innerText = "Selected Summary";
-        document.getElementById("summary-content").innerText = summaryContent;
+      // Show the selected summary
+      function viewSummary(video) {
+        document.getElementById("summary-title").innerText = video.title;
+        document.getElementById("summary-content").innerText = video.summary;
       }
     </script>
   </body>
