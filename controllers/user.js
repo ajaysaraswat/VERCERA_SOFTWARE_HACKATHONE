@@ -38,6 +38,7 @@ const handlepostsignin = async (req, res) => {
 };
 
 const handlelogout = (req, res) => {
+  console.log("logun")
   res.clearCookie("uid").redirect("/user/signin");
 };
 
